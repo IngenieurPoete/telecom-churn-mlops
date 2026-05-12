@@ -1,0 +1,23 @@
+artifact_path: file:C:/Users/hp/Desktop/telecom-churn-mlops/mlruns/1/models/m-ca43a315c1da41f2a7de99f8790114d7/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.11
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+mlflow_version: 3.12.0
+model_id: m-ca43a315c1da41f2a7de99f8790114d7
+model_size_bytes: 1755
+model_uuid: m-ca43a315c1da41f2a7de99f8790114d7
+prompts: null
+run_id: 7ddf0fa6e91b42a9a13ac2c87592e263
+utc_time_created: '2026-05-12 10:35:49.774526'
