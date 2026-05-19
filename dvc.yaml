@@ -1,0 +1,21 @@
+stages:
+  preprocess:
+    cmd: python src/data/preprocess.py
+    deps:
+      - data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
+      - src/data/preprocess.py
+    outs:
+      - data/processed/X_train.csv
+      - data/processed/X_test.csv
+      - data/processed/y_train.csv
+      - data/processed/y_test.csv
+      - models/scaler.pkl
+  train:
+    cmd: python src/models/train_mlflow.py
+    deps:
+      - data/processed/X_train.csv
+      - data/processed/X_test.csv
+      - src/models/train_mlflow.py
+    outs:
+      - models/best_model.pkl
+      - mlruns/

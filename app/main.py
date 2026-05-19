@@ -51,33 +51,27 @@ def health_check():
 
 @app.post("/predict", response_model=PredictionResponse)
 def predict_churn(client: ClientData):
-    """
-    Prédit la probabilité de churn d'un client.
-
-    Returns:
-        churn_prediction : 1 = va churner, 0 = reste
-        churn_probability: probabilité entre 0 et 1
-        risk_level       : Faible / Moyen / Élevé
-    """
     try:
-        # Construction du vecteur de features
-        # Note: en production, toutes les features seraient passées
+        # 1. Construire le DataFrame avec les features reçues
         features = pd.DataFrame([{
             'tenure': client.tenure,
             'MonthlyCharges': client.MonthlyCharges,
             'TotalCharges': client.TotalCharges,
+            'Contract_One_year': client.Contract_One_year,
+            'Contract_Two_year': client.Contract_Two_year
+            # Ajoute ici les autres features si ton modèle les attend (One-Hot)
+            # Sinon, assure-toi que le modèle a été entraîné avec ces features uniquement
         }])
+        
+        # 2. S'assurer que les colonnes sont dans le bon ordre (comme à l'entraînement)
+        # (Supposition : ton modèle attend exactement ces colonnes)
+        features = features.reindex(columns=model.feature_names_in_, fill_value=0)
 
-        # Scaling des features numériques
+        # 3. Scaler les features numériques
         features_scaled = scaler.transform(features)
 
-        # Prédiction
-        proba = model.predict_proba(
-            np.zeros((1, model.n_features_in_))  # vecteur complet de zéros
-        )[0][1]
-
-        # Pour la démo : on utilise une règle simple sur les 3 features fournies
-        # (en prod, le vecteur complet serait reconstruit)
+        # 4. Prédiction
+        proba = model.predict_proba(features_scaled)[0][1]
         prediction = 1 if proba > 0.5 else 0
 
         risk = (
